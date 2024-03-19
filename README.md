@@ -1,5 +1,8 @@
 # MediumCloneAngular
 
+Training for NgRx from https://www.youtube.com/watch?v=vcfZ0EQpYTA&t=393s
+about NgRx setup + basic stufff with actions, reducer, selector + api stuff with effects + service
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.10.
 
 ## Development server
