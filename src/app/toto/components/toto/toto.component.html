@@ -13,8 +13,8 @@
         {{ data?.formulasIds }}
       </div>
     
-      <div>
-        {{ data?.formulasIdsValues | json }}
+      <div *ngIf="data?.formulasIdsValues">
+        {{ data?.formulasIdsValues | json}}
       </div>
 </ng-container>
 

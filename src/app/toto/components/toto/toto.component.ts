@@ -21,13 +21,13 @@ import { totoActions } from "../../store/actions";
     //   password: ['', Validators.required],
     // });
 
-    @Input() userId: string | undefined;
+    @Input() userId: string[] | undefined;
    
     data$ = combineLatest({
       isSubmitting: this.store.select(selectIsSubmitting),
       isLoading: this.store.select(selectIsLoading),
       formulasIds: this.store.select(selectFormulasIds),
-      formulasIdsValues: this.store.select(selectFormulasIdsValues).pipe(map(data => data.filter(p => p.id === this.userId)))
+      formulasIdsValues: this.store.select(selectFormulasIdsValues).pipe(map(data => data.filter(p => this.userId?.includes(p.id))))
       // backendErrors: this.store.select(selectValidationErrors)
     });
   
@@ -41,8 +41,7 @@ import { totoActions } from "../../store/actions";
     ngOnInit() {
       // this.store.dispatch(totoActions.fetch());
       console.log('this.userId: ', this.userId);
-      this.store.dispatch(totoActions.register({formulas: [this.userId!]}));
-
+      this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
       this.store.dispatch(totoActions.fetch());
     }
   

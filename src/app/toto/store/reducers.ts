@@ -14,13 +14,15 @@ const totoFeature = createFeature({
     reducer: createReducer(
       initialState,
     on(totoActions.register, (state, action) => (
-        console.log('state', state),
-        console.log('action.formulas', action.formulas),  
+        // console.log('state register', state),
+        // console.log('action.formulas', action.formulas),  
         {
         ...state,
-        formulasIds: state.formulasIds.concat(action.formulas),
+        formulasIds: [...new Set([...state.formulasIds, ...action.formulas])],
     })),
-      on(totoActions.fetch, (state) => ({
+      on(totoActions.fetch, (state) => (
+        // console.log('state fetch', state),
+        {
         ...state,
         isSubmitting: true,
       })),

@@ -2,5 +2,9 @@
 <div *ngIf="token">user already created</div>
 <router-outlet></router-outlet>
 
-<mc-toto [userId]="'1'"></mc-toto>
-<mc-toto [userId]="'2'"></mc-toto>
+<mc-toto [userId]="['1', '3']"></mc-toto>
+<mc-toto [userId]="['2']"></mc-toto>
+<mc-toto [userId]="['2', '3']"></mc-toto>
+<mc-toto [userId]="['4']"></mc-toto>
+<mc-toto [userId]="['5', '3']"></mc-toto>
+<mc-toto [userId]="['1', '2', '3', '4', '5']"></mc-toto>
