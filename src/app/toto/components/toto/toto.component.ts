@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { TotoStateInterface } from "../../types/totoState.interface";
 import { TotoService } from "../../services/toto.services";
-import { combineLatest } from "rxjs";
+import { combineLatest, map } from "rxjs";
 import { selectFormulasIds, selectFormulasIdsValues, selectIsLoading, selectIsSubmitting } from "../../store/reducers";
 import { CommonModule } from "@angular/common";
 import { totoActions } from "../../store/actions";
@@ -27,7 +27,7 @@ import { totoActions } from "../../store/actions";
       isSubmitting: this.store.select(selectIsSubmitting),
       isLoading: this.store.select(selectIsLoading),
       formulasIds: this.store.select(selectFormulasIds),
-      formulasIdsValues: this.store.select(selectFormulasIdsValues),
+      formulasIdsValues: this.store.select(selectFormulasIdsValues).pipe(map(data => data.filter(p => p.id === this.userId)))
       // backendErrors: this.store.select(selectValidationErrors)
     });
   
