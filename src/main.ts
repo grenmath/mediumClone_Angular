@@ -14,6 +14,8 @@ import { authFeatureKey, authReducer } from './app/auth/store/reducers';
 import { provideHttpClient } from '@angular/common/http';
 import { provideEffects } from '@ngrx/effects';
 import * as authEffects from './app/auth/store/effects';
+import { totoFeatureKey, totoReducer } from './app/toto/store/reducers';
+import * as totoEffects  from './app/toto/store/effects';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -21,7 +23,9 @@ bootstrapApplication(AppComponent, {
     provideRouter(appRoutes),
     provideStore(),
     provideState(authFeatureKey, authReducer),
+    provideState(totoFeatureKey, totoReducer),
     provideEffects(authEffects),
+    provideEffects(totoEffects),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
       logOnly: !isDevMode(), // Restrict extension to log-only mode

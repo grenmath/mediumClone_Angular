@@ -2,12 +2,13 @@ import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import { PersistanceService } from './shared/services/persistance.service';
 import { CommonModule } from '@angular/common';
+import { TotoComponent } from "./toto/components/toto/toto.component";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  standalone: true,
-  imports: [RouterOutlet, CommonModule],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: true,
+    imports: [RouterOutlet, CommonModule, TotoComponent]
 })
 export class AppComponent {
   title = 'mediumClone_Angular';

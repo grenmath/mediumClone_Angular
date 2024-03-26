@@ -1,0 +1,21 @@
+<div style="margin: 10px; background-color: antiquewhite">
+  <div>Local me component</div>
+
+  userId : {{ userId }}
+  <ng-container *ngIf="data$ | async as data">
+
+    <div>
+        is Submit => {{ data?.isSubmitting }}
+    
+        is loading => {{ data?.isSubmitting }}
+      </div>
+      <div>
+        {{ data?.formulasIds }}
+      </div>
+    
+      <div>
+        {{ data?.formulasIdsValues | json }}
+      </div>
+</ng-container>
+
+</div>
