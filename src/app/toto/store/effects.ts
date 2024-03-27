@@ -32,6 +32,9 @@ export const totoEffects = createEffect(
       .pipe(ofType(routerNavigationAction))
       .pipe(tap(() => console.log('cancelTrigger triggered')));
 
+    // since i added a CANCEL ACTION, 
+    // no required to add cancelTrigger by router navigayion
+
     return action$.pipe(
       ofType(totoActions.register, totoActions.cancel),
       debounceTime(1000),
@@ -40,7 +43,7 @@ export const totoEffects = createEffect(
         return action.type === totoActions.cancel.type
           ? of()
           : totoService.getToto({formulaIds}).pipe(
-              takeUntil(cancelTrigger),
+              // takeUntil(cancelTrigger),
               map((formulasIdsValues) => {
                 return totoActions.fetchSuccess({formulasIdsValues});
               }),
