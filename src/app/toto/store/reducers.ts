@@ -18,24 +18,28 @@ const totoFeature = createFeature({
         // console.log('action.formulas', action.formulas),  
         {
         ...state,
+        isLoading: true,
         formulasIds: [...new Set([...state.formulasIds, ...action.formulas])],
     })),
-      on(totoActions.fetch, (state) => (
+      on(totoActions.fetch, (state, action) => (
         // console.log('state fetch', state),
         {
         ...state,
-        isSubmitting: true,
+        isLoading: true,
+        isSubmitting: action.submited,
       })),
       on(totoActions.fetchSuccess, (state, action) => ({
         ...state,
+        isLoading: false,
         isSubmitting: false,
         formulasIdsValues: action.formulasIdsValues,
       })),
-    //   on(authActions.registerFailure, (state, action) => ({
-    //     ...state,
-    //     isSubmitting: false,
-    //     validationErrors: action.errors
-    //   }))
+      on(totoActions.fetchFailure, (state, action) => ({
+        ...state,
+        isLoading: false,
+        isSubmitting: false,
+        // validationErrors: action.errors
+      }))
     ),
   });
   

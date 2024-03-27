@@ -11,6 +11,7 @@ import { totoActions } from './actions';
 import { selectFormulasIds, totoReducer } from './reducers';
 import { Store } from '@ngrx/store';
 import { TotoStateInterface } from '../types/totoState.interface';
+import { skip, takeUntil } from 'rxjs/operators';
 
 export const totoEffects = createEffect(
   (
@@ -23,15 +24,17 @@ export const totoEffects = createEffect(
       withLatestFrom(store.select(selectFormulasIds)),
       debounceTime(1000),
       switchMap(([action, formulaIds] ) => {
+        const nextSearch$ = action$.pipe(
+          ofType(totoActions.fetch),
+          skip(1)
+        );
         return totoService.getToto({ formulaIds }).pipe(
+          takeUntil(nextSearch$),
           map((formulasIdsValues) => {
-            // persistanceService.set('accessToken', currentUser.token);
             return totoActions.fetchSuccess({formulasIdsValues});
           }),
           catchError((errorResponse: HttpErrorResponse) =>
-            of(
-              totoActions.fetchFailure({errors: errorResponse.error.errors})
-            )
+            of(totoActions.fetchFailure({errors: errorResponse.error.errors}))
           )
         );
       })

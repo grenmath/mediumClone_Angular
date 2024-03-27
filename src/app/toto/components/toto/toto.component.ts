@@ -15,6 +15,7 @@ import {totoActions} from '../../store/actions';
 @Component({
   selector: 'mc-toto',
   templateUrl: './toto.component.html',
+  styleUrls: ['./toto.component.scss'],
   standalone: true,
   imports: [CommonModule],
   // imports: [ReactiveFormsModule, RouterLink, CommonModule, BackendErrorMessages],
@@ -27,6 +28,7 @@ export class TotoComponent {
   // });
 
   @Input() userId: string[] | undefined;
+  @Input() title: string | undefined;
 
   data$ = combineLatest({
     isSubmitting: this.store.select(selectIsSubmitting),
@@ -48,7 +50,15 @@ export class TotoComponent {
     // this.store.dispatch(totoActions.fetch());
     console.log('this.userId: ', this.userId);
     this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
-    this.store.dispatch(totoActions.fetch());
+    this.store.dispatch(totoActions.fetch({submited: false}));
+  }
+
+  dispatchAction(id: string) {
+    // push id in this.userId array
+    this.userId = this.userId || [];
+    this.userId = [...this.userId, id];
+    this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
+    this.store.dispatch(totoActions.fetch({submited: true}));
   }
 
   onSubmitTest() {

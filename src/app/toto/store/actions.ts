@@ -6,7 +6,7 @@ export const totoActions = createActionGroup({
     source: 'toto',
     events: {
         Register: props<{formulas: string[]}>(),
-        Fetch: emptyProps,
+        Fetch: props<{submited: boolean}>(),
         'Fetch success': props<{formulasIdsValues: FormulaIdValue[]}>(),
         'Fetch failure': props<{errors: string}>()
     }

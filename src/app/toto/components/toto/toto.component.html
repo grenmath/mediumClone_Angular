@@ -1,21 +1,13 @@
 <div style="margin: 10px; background-color: antiquewhite">
-  <div>Local me component</div>
-
-  userId : {{ userId }}
+  <div>Toto Component: <span>{{title}}</span></div>
+  <div><span>Ids:</span> {{ userId }}</div>
   <ng-container *ngIf="data$ | async as data">
-
-    <div>
-        is Submit => {{ data?.isSubmitting }}
-    
-        is loading => {{ data?.isSubmitting }}
-      </div>
-      <div>
-        {{ data?.formulasIds }}
-      </div>
-    
-      <div *ngIf="data?.formulasIdsValues">
-        {{ data?.formulasIdsValues | json}}
-      </div>
-</ng-container>
-
+    <div><button (click)="dispatchAction('4')" [disabled]="data.isSubmitting">ask 4</button></div>
+    <span [style.color]="data?.isLoading ? 'red' : 'green'">is loading => {{ data?.isLoading }}</span>
+    <div><span>is Submit =></span> {{ data?.isSubmitting }}</div>
+    <div><span>Requested State Ids:</span> {{ data?.formulasIds }} </div>
+    <div *ngIf="data?.formulasIdsValues">
+      <span>Received State filtered values:</span> {{ data?.formulasIdsValues | json }}
+    </div>
+  </ng-container>
 </div>
