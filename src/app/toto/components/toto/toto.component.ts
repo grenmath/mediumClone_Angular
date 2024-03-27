@@ -1,16 +1,16 @@
+import {CommonModule} from '@angular/common';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {TotoStateInterface} from '../../types/totoState.interface';
-import {TotoService} from '../../services/toto.services';
 import {combineLatest, map} from 'rxjs';
+import {TotoService} from '../../services/toto.services';
+import {totoActions} from '../../store/actions';
 import {
   selectFormulasIds,
   selectFormulasIdsValues,
   selectIsLoading,
   selectIsSubmitting,
 } from '../../store/reducers';
-import {CommonModule} from '@angular/common';
-import {totoActions} from '../../store/actions';
+import {TotoStateInterface} from '../../types/totoState.interface';
 
 @Component({
   selector: 'mc-toto',
@@ -20,7 +20,7 @@ import {totoActions} from '../../store/actions';
   imports: [CommonModule],
   // imports: [ReactiveFormsModule, RouterLink, CommonModule, BackendErrorMessages],
 })
-export class TotoComponent implements OnInit, OnDestroy{
+export class TotoComponent implements OnInit, OnDestroy {
   @Input() userId: string[] | undefined;
   @Input() title: string | undefined;
 
@@ -49,7 +49,7 @@ export class TotoComponent implements OnInit, OnDestroy{
   private registerFetch() {
     this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
     // this.store.dispatch(totoActions.fetch({submited: false}));
-  } 
+  }
 
   dispatchAction(id: string) {
     // push id in this.userId array
@@ -60,6 +60,6 @@ export class TotoComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     console.log('cancel calls');
-    this.totoService.cancelCalls()
-  } 
+    // this.totoService.cancelCalls()
+  }
 }

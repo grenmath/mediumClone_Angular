@@ -2,16 +2,25 @@ import {inject} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 // import {AuthService} from '../services/auth.services';
 // import {authActions} from './actions';
-import {catchError, debounceTime, map, of, switchMap, tap, withLatestFrom} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
+import {
+  catchError,
+  debounceTime,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 // import {PersistanceService} from 'src/app/shared/services/persistance.service';
 // import {Router} from '@angular/router';
-import { TotoService } from '../services/toto.services';
-import { totoActions } from './actions';
-import { selectFormulasIds, totoReducer } from './reducers';
-import { Store } from '@ngrx/store';
-import { TotoStateInterface } from '../types/totoState.interface';
-import { skip, takeUntil } from 'rxjs/operators';
+import {routerNavigationAction} from '@ngrx/router-store';
+import {Store} from '@ngrx/store';
+import {TotoService} from '../services/toto.services';
+import {TotoStateInterface} from '../types/totoState.interface';
+import {totoActions} from './actions';
+import {selectFormulasIds} from './reducers';
 
 export const totoEffects = createEffect(
   (
@@ -19,16 +28,17 @@ export const totoEffects = createEffect(
     totoService = inject(TotoService),
     store = inject(Store<{toto: TotoStateInterface}>)
   ) => {
+    const cancelTrigger = action$
+      .pipe(ofType(routerNavigationAction))
+      .pipe(tap(() => console.log('cancelTrigger triggered')));
+
     return action$.pipe(
       ofType(totoActions.register),
-      withLatestFrom(store.select(selectFormulasIds)),
       debounceTime(1000),
-      switchMap(([action, formulaIds] ) => {
-        // const nextSearch$ = action$.pipe(
-        //   ofType(totoActions.register),
-        //   skip(1)
-        // );
-        return totoService.getToto({ formulaIds }).pipe(
+      withLatestFrom(store.select(selectFormulasIds)),
+      switchMap(([action, formulaIds]) => {
+        return totoService.getToto({formulaIds}).pipe(
+          takeUntil(cancelTrigger),
           // takeUntil(nextSearch$),
           map((formulasIdsValues) => {
             return totoActions.fetchSuccess({formulasIdsValues});

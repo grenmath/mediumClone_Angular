@@ -1,20 +1,20 @@
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 // import {RegisterRequestInterface} from '../types/registerRequest.interface';
-import {Observable, Subject, delay, interval, map, of, takeUntil} from 'rxjs';
+import {Observable, map} from 'rxjs';
 // import {CurrentUserInterface} from 'src/app/shared/types/currentUser.interface';
 // import {AuthResponseInterface} from '../types/authResponse.interface';
-import {environment} from 'src/environments/environment';
-import {TotoRequestInterface} from '../types/totoRequest.interface';
 import {FormulaIdValue} from '../types/formulasValues.interface';
-import {TotoResponseInterface} from '../types/totoResponse.interface';
+import {TotoRequestInterface} from '../types/totoRequest.interface';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class TotoService {
   constructor(private http: HttpClient) {}
-  private destroy$ = new Subject<boolean>();
+
+  // WARN => onDestroy lifecycle hooks only exist on services when they are not
+  // used as singletons (provided in root), but only when they are provided in
+  // components and are thereby linked to the components lifecycle
+  // private destroy$ = new Subject<boolean>();
 
   getToto(data: TotoRequestInterface): Observable<FormulaIdValue[]> {
     const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -25,8 +25,9 @@ export class TotoService {
     //   .pipe(map((response: TotoResponseInterface) => response.formulasIdsValues));
 
     /// mock fake call
+    // return timer(3000).pipe(
     return this.http.get<any>(url).pipe(
-      takeUntil(this.destroy$),
+      // takeUntil(this.destroy$),
       map((response) => {
         console.log('response: ', response);
         return [
@@ -49,8 +50,8 @@ export class TotoService {
     // ]).pipe(delay(3000));
   }
 
-  cancelCalls() {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
+  // cancelCalls() {
+  //   this.destroy$.next(true);
+  //   this.destroy$.complete();
+  // }
 }
