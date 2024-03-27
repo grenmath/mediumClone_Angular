@@ -25,9 +25,7 @@ export class TotoService {
     //   .pipe(map((response: TotoResponseInterface) => response.formulasIdsValues));
 
     /// mock fake call
-    // return timer(3000).pipe(
     return this.http.get<any>(url).pipe(
-      // takeUntil(this.destroy$),
       map((response) => {
         console.log('response: ', response);
         return [
@@ -49,9 +47,4 @@ export class TotoService {
     //   {id: '5', value: '5'},
     // ]).pipe(delay(3000));
   }
-
-  // cancelCalls() {
-  //   this.destroy$.next(true);
-  //   this.destroy$.complete();
-  // }
 }

@@ -33,20 +33,23 @@ export const totoEffects = createEffect(
       .pipe(tap(() => console.log('cancelTrigger triggered')));
 
     return action$.pipe(
-      ofType(totoActions.register),
+      ofType(totoActions.register, totoActions.cancel),
       debounceTime(1000),
       withLatestFrom(store.select(selectFormulasIds)),
       switchMap(([action, formulaIds]) => {
-        return totoService.getToto({formulaIds}).pipe(
-          takeUntil(cancelTrigger),
-          // takeUntil(nextSearch$),
-          map((formulasIdsValues) => {
-            return totoActions.fetchSuccess({formulasIdsValues});
-          }),
-          catchError((errorResponse: HttpErrorResponse) =>
-            of(totoActions.fetchFailure({errors: errorResponse.error.errors}))
-          )
-        );
+        return action.type === totoActions.cancel.type
+          ? of()
+          : totoService.getToto({formulaIds}).pipe(
+              takeUntil(cancelTrigger),
+              map((formulasIdsValues) => {
+                return totoActions.fetchSuccess({formulasIdsValues});
+              }),
+              catchError((errorResponse: HttpErrorResponse) =>
+                of(
+                  totoActions.fetchFailure({errors: errorResponse.error.errors})
+                )
+              )
+            );
       })
     );
   },

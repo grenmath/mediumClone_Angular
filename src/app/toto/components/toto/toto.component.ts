@@ -20,7 +20,7 @@ import {TotoStateInterface} from '../../types/totoState.interface';
   imports: [CommonModule],
   // imports: [ReactiveFormsModule, RouterLink, CommonModule, BackendErrorMessages],
 })
-export class TotoComponent implements OnInit, OnDestroy {
+export class TotoComponent implements OnInit {
   @Input() userId: string[] | undefined;
   @Input() title: string | undefined;
 
@@ -48,6 +48,8 @@ export class TotoComponent implements OnInit, OnDestroy {
 
   private registerFetch() {
     this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
+    
+    // useless action since effect listen register action
     // this.store.dispatch(totoActions.fetch({submited: false}));
   }
 
@@ -56,10 +58,5 @@ export class TotoComponent implements OnInit, OnDestroy {
     this.userId = this.userId || [];
     this.userId = [...this.userId, id];
     this.registerFetch();
-  }
-
-  ngOnDestroy(): void {
-    console.log('cancel calls');
-    // this.totoService.cancelCalls()
   }
 }
