@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {TotoStateInterface} from '../../types/totoState.interface';
 import {TotoService} from '../../services/toto.services';
@@ -20,13 +20,7 @@ import {totoActions} from '../../store/actions';
   imports: [CommonModule],
   // imports: [ReactiveFormsModule, RouterLink, CommonModule, BackendErrorMessages],
 })
-export class TotoComponent {
-  // formGroup = this.fb.nonNullable.group({
-  //   username: ['', Validators.required],
-  //   email: ['', Validators.required],
-  //   password: ['', Validators.required],
-  // });
-
+export class TotoComponent implements OnInit, OnDestroy{
   @Input() userId: string[] | undefined;
   @Input() title: string | undefined;
 
@@ -46,27 +40,26 @@ export class TotoComponent {
     private totoService: TotoService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // this.store.dispatch(totoActions.fetch());
     console.log('this.userId: ', this.userId);
-    this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
-    this.store.dispatch(totoActions.fetch({submited: false}));
+    this.registerFetch();
   }
+
+  private registerFetch() {
+    this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
+    // this.store.dispatch(totoActions.fetch({submited: false}));
+  } 
 
   dispatchAction(id: string) {
     // push id in this.userId array
     this.userId = this.userId || [];
     this.userId = [...this.userId, id];
-    this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
-    this.store.dispatch(totoActions.fetch({submited: true}));
+    this.registerFetch();
   }
 
-  onSubmitTest() {
-    // this.totoService.getToto({userId: this.userId}).subscribe((res) => console.log('res: ', res));
-    // const request: RegisterRequestInterface = {
-    //   user: this.formGroup.getRawValue(),
-    // };
-    // this.store.dispatch(authActions.register({request}));
-    // this.authService.register(request).subscribe((res) => console.log('res: ', res));
-  }
+  ngOnDestroy(): void {
+    console.log('cancel calls');
+    this.totoService.cancelCalls()
+  } 
 }

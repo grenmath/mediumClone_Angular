@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 // import {RegisterRequestInterface} from '../types/registerRequest.interface';
-import {Observable, delay, map, of} from 'rxjs';
+import {Observable, Subject, delay, interval, map, of, takeUntil} from 'rxjs';
 // import {CurrentUserInterface} from 'src/app/shared/types/currentUser.interface';
 // import {AuthResponseInterface} from '../types/authResponse.interface';
 import {environment} from 'src/environments/environment';
@@ -14,6 +14,7 @@ import {TotoResponseInterface} from '../types/totoResponse.interface';
 })
 export class TotoService {
   constructor(private http: HttpClient) {}
+  private destroy$ = new Subject<boolean>();
 
   getToto(data: TotoRequestInterface): Observable<FormulaIdValue[]> {
     const url = 'https://jsonplaceholder.typicode.com/posts';
@@ -25,7 +26,7 @@ export class TotoService {
 
     /// mock fake call
     return this.http.get<any>(url).pipe(
-      delay(3000),
+      takeUntil(this.destroy$),
       map((response) => {
         console.log('response: ', response);
         return [
@@ -46,5 +47,10 @@ export class TotoService {
     //   {id: '4', value: '4444'},
     //   {id: '5', value: '5'},
     // ]).pipe(delay(3000));
+  }
+
+  cancelCalls() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

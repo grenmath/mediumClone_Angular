@@ -43,6 +43,8 @@ const totoFeature = createFeature({
     ),
   });
   
+// tu peux crééer des selector function with parameters
+
   export const {
     name: totoFeatureKey,
     reducer: totoReducer,

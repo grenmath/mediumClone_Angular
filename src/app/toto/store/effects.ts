@@ -20,16 +20,16 @@ export const totoEffects = createEffect(
     store = inject(Store<{toto: TotoStateInterface}>)
   ) => {
     return action$.pipe(
-      ofType(totoActions.fetch),
+      ofType(totoActions.register),
       withLatestFrom(store.select(selectFormulasIds)),
       debounceTime(1000),
       switchMap(([action, formulaIds] ) => {
-        const nextSearch$ = action$.pipe(
-          ofType(totoActions.fetch),
-          skip(1)
-        );
+        // const nextSearch$ = action$.pipe(
+        //   ofType(totoActions.register),
+        //   skip(1)
+        // );
         return totoService.getToto({ formulaIds }).pipe(
-          takeUntil(nextSearch$),
+          // takeUntil(nextSearch$),
           map((formulasIdsValues) => {
             return totoActions.fetchSuccess({formulasIdsValues});
           }),
