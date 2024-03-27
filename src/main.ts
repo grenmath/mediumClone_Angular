@@ -3,25 +3,27 @@
 // platformBrowserDynamic().bootstrapModule(AppModule)
 //   .catch(err => console.error(err));
 
+import {provideHttpClient} from '@angular/common/http';
+import {isDevMode} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {AppComponent} from './app/app.component';
 import {provideRouter} from '@angular/router';
-import {appRoutes} from './app/app.routes';
+import {provideEffects} from '@ngrx/effects';
+import {provideRouterStore} from '@ngrx/router-store';
 import {provideState, provideStore} from '@ngrx/store';
 import {provideStoreDevtools} from '@ngrx/store-devtools';
-import {isDevMode} from '@angular/core';
-import { authFeatureKey, authReducer } from './app/auth/store/reducers';
-import { provideHttpClient } from '@angular/common/http';
-import { provideEffects } from '@ngrx/effects';
+import {AppComponent} from './app/app.component';
+import {appRoutes} from './app/app.routes';
 import * as authEffects from './app/auth/store/effects';
-import { totoFeatureKey, totoReducer } from './app/toto/store/reducers';
-import * as totoEffects  from './app/toto/store/effects';
+import {authFeatureKey, authReducer} from './app/auth/store/reducers';
+import * as totoEffects from './app/toto/store/effects';
+import {totoFeatureKey, totoReducer} from './app/toto/store/reducers';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
     provideRouter(appRoutes),
     provideStore(),
+    provideRouterStore({}),
     provideState(authFeatureKey, authReducer),
     provideState(totoFeatureKey, totoReducer),
     provideEffects(authEffects),
