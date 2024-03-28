@@ -9,7 +9,7 @@ const initialState: TotoStateInterface = {
   formulasIdsValues: [],
 };
 
-const totoFeature = createFeature({
+export const totoFeature = createFeature({
   name: 'toto',
   reducer: createReducer(
     initialState,
@@ -46,12 +46,3 @@ const totoFeature = createFeature({
 });
 
 // tu peux crééer des selector function with parameters
-
-export const {
-  name: totoFeatureKey,
-  reducer: totoReducer,
-  selectIsSubmitting,
-  selectIsLoading,
-  selectFormulasIds,
-  selectFormulasIdsValues,
-} = totoFeature;

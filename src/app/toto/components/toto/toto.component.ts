@@ -1,15 +1,10 @@
 import {CommonModule} from '@angular/common';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {combineLatest, map} from 'rxjs';
 import {TotoService} from '../../services/toto.services';
 import {totoActions} from '../../store/actions';
-import {
-  selectFormulasIds,
-  selectFormulasIdsValues,
-  selectIsLoading,
-  selectIsSubmitting,
-} from '../../store/reducers';
+import {totoFeature} from '../../store/reducers';
 import {TotoStateInterface} from '../../types/totoState.interface';
 
 @Component({
@@ -25,11 +20,11 @@ export class TotoComponent implements OnInit {
   @Input() title: string | undefined;
 
   data$ = combineLatest({
-    isSubmitting: this.store.select(selectIsSubmitting),
-    isLoading: this.store.select(selectIsLoading),
-    formulasIds: this.store.select(selectFormulasIds),
+    isSubmitting: this.store.select(totoFeature.selectIsSubmitting),
+    isLoading: this.store.select(totoFeature.selectIsLoading),
+    formulasIds: this.store.select(totoFeature.selectFormulasIds),
     formulasIdsValues: this.store
-      .select(selectFormulasIdsValues)
+      .select(totoFeature.selectFormulasIdsValues)
       .pipe(map((data) => data.filter((p) => this.userId?.includes(p.id)))),
     // backendErrors: this.store.select(selectValidationErrors)
   });
@@ -48,7 +43,7 @@ export class TotoComponent implements OnInit {
 
   private registerFetch() {
     this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
-    
+
     // useless action since effect listen register action
     // this.store.dispatch(totoActions.fetch({submited: false}));
   }

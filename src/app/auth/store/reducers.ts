@@ -1,7 +1,6 @@
 import {createFeature, createReducer, on} from '@ngrx/store';
 import {AuthStateInterface} from '../types/authState.interface';
 import {authActions} from './actions';
-// import { register } from './actions';
 
 const initialState: AuthStateInterface = {
   isSubmitting: false,
@@ -10,37 +9,25 @@ const initialState: AuthStateInterface = {
   validationErrors: null,
 };
 
-// const authFeature = createFeature({
-//   name: 'auth',
-//   reducer: createReducer(initialState, on(register, (state) => ({...state, isSubmitting: true})) )
-// });
-const authFeature = createFeature({
+export const authFeature = createFeature({
   name: 'auth',
   reducer: createReducer(
     initialState,
-    on(authActions.register, (state) => ({
+
+    on(authActions.register, (state: AuthStateInterface) => ({
       ...state,
       isSubmitting: true,
       validationErrors: null,
     })),
-    on(authActions.registerSuccess, (state, action) => ({
+    on(authActions.registerSuccess, (state: AuthStateInterface, action) => ({
       ...state,
       isSubmitting: false,
       currentUser: action.currentUser,
     })),
-    on(authActions.registerFailure, (state, action) => ({
+    on(authActions.registerFailure, (state: AuthStateInterface, action) => ({
       ...state,
       isSubmitting: false,
-      validationErrors: action.errors
+      validationErrors: action.errors,
     }))
   ),
 });
-
-export const {
-  name: authFeatureKey,
-  reducer: authReducer,
-  selectIsSubmitting,
-  selectIsLoading,
-  selectCurrentUser,
-  selectValidationErrors
-} = authFeature;
