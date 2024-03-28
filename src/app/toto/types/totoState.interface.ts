@@ -1,9 +1,9 @@
-import { FormulaIdValue } from "./formulasValues.interface";
+import {EntityState} from '@ngrx/entity';
+import {FormulaIdValue} from './formulasValues.interface';
 
-export interface TotoStateInterface {
+export interface TotoStateInterface extends EntityState<FormulaIdValue> {
   isSubmitting: boolean;
   formulasIds: string[];
-  formulasIdsValues: FormulaIdValue[];
   isLoading: boolean | null;
   // validationErrors: BackendErrorsInterface | null;
   // isLoggedIn: boolean | null;
