@@ -14,9 +14,9 @@ import {provideStoreDevtools} from '@ngrx/store-devtools';
 import {AppComponent} from './app/app.component';
 import {appRoutes} from './app/app.routes';
 import * as authEffects from './app/auth/store/effects';
-import {authFeatureKey, authReducer} from './app/auth/store/reducers';
+import {authFeature} from './app/auth/store/reducers';
 import * as totoEffects from './app/toto/store/effects';
-import {totoFeatureKey, totoReducer} from './app/toto/store/reducers';
+import {totoFeature} from './app/toto/store/reducers';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -24,8 +24,8 @@ bootstrapApplication(AppComponent, {
     provideRouter(appRoutes),
     provideStore(),
     provideRouterStore({}),
-    provideState(authFeatureKey, authReducer),
-    provideState(totoFeatureKey, totoReducer),
+    provideState(authFeature),
+    provideState(totoFeature),
     provideEffects(authEffects),
     provideEffects(totoEffects),
     provideStoreDevtools({
