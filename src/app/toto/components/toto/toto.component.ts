@@ -45,9 +45,6 @@ export class TotoComponent implements OnInit {
 
   private registerFetch() {
     this.store.dispatch(totoActions.register({formulas: this.userId ?? []}));
-
-    // useless action since effect listen register action
-    // this.store.dispatch(totoActions.fetch({submited: false}));
   }
 
   dispatchAction(id: string) {
