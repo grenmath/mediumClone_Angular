@@ -1,8 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {Component, Input, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {combineLatest, map} from 'rxjs';
-import {TotoService} from '../../services/toto.services';
+import {BehaviorSubject, combineLatest, switchMap} from 'rxjs';
 import {totoActions} from '../../store/actions';
 import {totoFeature} from '../../store/reducers';
 import {TotoStateInterface} from '../../types/totoState.interface';
@@ -13,30 +12,33 @@ import {TotoStateInterface} from '../../types/totoState.interface';
   styleUrls: ['./toto.component.scss'],
   standalone: true,
   imports: [CommonModule],
-  // imports: [ReactiveFormsModule, RouterLink, CommonModule, BackendErrorMessages],
 })
 export class TotoComponent implements OnInit {
-  @Input() userId: string[] | undefined;
+  private readonly userIdsSubject = new BehaviorSubject<string[]>([]);
+
+  @Input()
+  get userId(): string[] {
+    return this.userIdsSubject.value;
+  }
+  set userId(ids: string[]) {
+    this.userIdsSubject.next(ids);
+  }
+
   @Input() title: string | undefined;
 
   data$ = combineLatest({
     isSubmitting: this.store.select(totoFeature.selectIsSubmitting),
     isLoading: this.store.select(totoFeature.selectIsLoading),
     formulasIds: this.store.select(totoFeature.selectFormulasIds),
-    formulasIdsValues: this.store
-      .select(totoFeature.selectFormulasIdsValues)
-      .pipe(map((data) => data.filter((p) => this.userId?.includes(p.id)))),
+    formulasIdsValues: this.userIdsSubject.pipe(
+      switchMap((ids) => this.store.select(totoFeature.selectFormulaByIds(ids)))
+    ),
     // backendErrors: this.store.select(selectValidationErrors)
   });
 
-  constructor(
-    //   private fb: FormBuilder,
-    private store: Store<{toto: TotoStateInterface}>,
-    private totoService: TotoService
-  ) {}
+  constructor(private store: Store<{toto: TotoStateInterface}>) {}
 
   ngOnInit(): void {
-    // this.store.dispatch(totoActions.fetch());
     console.log('this.userId: ', this.userId);
     this.registerFetch();
   }
@@ -50,7 +52,6 @@ export class TotoComponent implements OnInit {
 
   dispatchAction(id: string) {
     // push id in this.userId array
-    this.userId = this.userId || [];
     this.userId = [...this.userId, id];
     this.registerFetch();
   }
